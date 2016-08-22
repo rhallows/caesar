@@ -15,10 +15,39 @@
 # limitations under the License.
 #
 import webapp2
+from caesar import encrypt
+
+
+form =
+"""
+<html>
+  <head>
+    <title>Caeaser Cypher</title>
+  </head>
+
+  <body>
+    <h2>Enter some text to ROT13:</h2>
+    <form method="post">
+      <textarea name="text"style="height: 100px; width: 400px;">
+      {text}
+      </textarea>
+      <br>
+      <input type="submit">
+    </form>
+  </body>
+</html>
+"""
+
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Hello world!')
+        self.response.write(form)
+    def post(self):
+       rot13 = ''
+       text = self.request.get('text')
+       rot13 = encrypt(text, 13)
+       self.response.write(form.replace('{text}', rot13))
+
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
