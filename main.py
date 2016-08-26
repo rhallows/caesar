@@ -18,21 +18,24 @@ import webapp2
 from caesar import encrypt
 
 
-form =
-"""
+form = """
 <html>
-  <head>
+    <head>
     <title>Caeaser Cypher</title>
-  </head>
+    </head>
 
   <body>
     <h2>Enter some text to ROT13:</h2>
     <form method="post">
-      <textarea name="text"style="height: 100px; width: 400px;">
-      {text}
-      </textarea>
-      <br>
-      <input type="submit">
+        <label> Specify Rotation Amount </label>
+        <br>
+        <input type="text" name="rot"/>
+        <br>
+        <textarea name="text"style="height: 100px; width: 400px;">
+        %(text)s
+        </textarea>
+        <br>
+        <input type="submit">
     </form>
   </body>
 </html>
@@ -41,12 +44,14 @@ form =
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write(form)
+        self.response.write(form % {'text': ''})
     def post(self):
        rot13 = ''
+       getRot = self.request.get('rot')
+       getRot = int(getRot)
        text = self.request.get('text')
-       rot13 = encrypt(text, 13)
-       self.response.write(form.replace('{text}', rot13))
+       rot13 = encrypt(text, getRot)
+       self.response.write(form % {'text': rot13})
 
 
 app = webapp2.WSGIApplication([
